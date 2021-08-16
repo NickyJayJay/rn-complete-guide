@@ -15,11 +15,17 @@ import GoalInput from './components/GoalInput';
 export default function App() {
   const [courseGoals, setCourseGoals] = useState([]);
 
-  const addGoalHandler = goalTitle => {
-    setCourseGoals(currentGoals => [
+  const addGoalHandler = (goalTitle) => {
+    setCourseGoals((currentGoals) => [
       ...currentGoals,
-      { id: Math.random().toString(), value: goalTitle }
+      { id: Math.random().toString(), value: goalTitle },
     ]);
+  };
+
+  const removeGoalHandler = (goalId) => {
+    setCourseGoals((currentGoals) => {
+      return currentGoals.filter((goal) => goal.id !== goalId);
+    });
   };
 
   return (
@@ -28,7 +34,13 @@ export default function App() {
       <FlatList
         keyExtractor={(item, index) => item.id}
         data={courseGoals}
-        renderItem={(itemData) => <GoalItem onDelete={() => console.log('Does that work?')} title={itemData.item.value} />}
+        renderItem={(itemData) => (
+          <GoalItem
+            id={itemData.item.id}
+            onDelete={removeGoalHandler}
+            title={itemData.item.value}
+          />
+        )}
       ></FlatList>
     </View>
   );
@@ -37,5 +49,5 @@ export default function App() {
 const styles = StyleSheet.create({
   screen: {
     padding: 50,
-  }
+  },
 });
